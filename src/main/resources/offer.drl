@@ -1,0 +1,92 @@
+package KieRule;
+
+import com.example.spring_drools.entity.Orders;
+import com.example.spring_drools.helper.RuleHelper;
+
+global RuleHelper ruleHelper;
+
+rule "Check Name"
+salience 5
+when
+    orderObj: Orders(name != "")
+then
+    ruleHelper.printMessage("Name is empty");
+end
+
+rule "Save Name"
+salience 10
+when
+    orderObj: Orders(name != "")
+then
+    ruleHelper.saveName(orderObj.getName());
+    ruleHelper.printMessage("Name saved to the database");
+end
+
+rule "Check Card Type"
+when
+    orderObj: Orders(cardType == "")
+then
+    ruleHelper.printMessage("Card Type is empty");
+end
+
+rule "Save Card Type"
+when
+    orderObj: Orders(cardType != "")
+then
+    ruleHelper.saveCardType(orderObj.getCardType());
+    ruleHelper.printMessage("Card Type saved to the database");
+end
+
+rule "Check Discount"
+when
+    orderObj: Orders(discount == 0)
+then
+    ruleHelper.printMessage("Discount is not set");
+end
+
+rule "Save Discount"
+when
+    orderObj: Orders(discount != 0)
+then
+    ruleHelper.saveDiscount(orderObj.getDiscount());
+    ruleHelper.printMessage("Discount saved to the database");
+end
+
+rule "Check Price"
+when
+    orderObj: Orders(price == 0)
+then
+    ruleHelper.printMessage("Price is not set");
+end
+
+rule "Save Price"
+when
+    orderObj: Orders(price != 0)
+then
+    ruleHelper.savePrice(orderObj.getPrice());
+    ruleHelper.printMessage("Price saved to the database");
+end
+
+rule "HDFC"
+when
+    orderObj: Orders(cardType == "HDFC", price > 10000)
+then
+    orderObj.setDiscount(10);
+    ruleHelper.printMessage("Discount set for HDFC card type");
+end
+
+rule "ICICI"
+when
+    orderObj: Orders(cardType == "ICICI", price > 15000)
+then
+    orderObj.setDiscount(20);
+    ruleHelper.printMessage("Discount set for ICICI card type");
+end
+
+rule "BOB"
+when
+    orderObj: Orders(cardType == "BOB", price > 20000)
+then
+    orderObj.setDiscount(30);
+    ruleHelper.printMessage("Discount set for BOB card type");
+end
